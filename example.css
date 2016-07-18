@@ -1,0 +1,18 @@
+body {
+	background: pink;
+	text-align: center;
+}
+
+.title {
+	font-size: 40px;
+	font-family: sans-serif;
+	letter-spacing: 2px;
+}
+
+.image-wrap {
+	text-align: center;
+}
+
+.image-wrap img {
+	display: inline-block;
+}
