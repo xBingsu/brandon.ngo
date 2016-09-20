@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     
-    clock_gettime(CLOCK_PROCESS_CPUTTIME_ID, &time1);
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time1);
     
     if (cpid != 0) {    /* Parent reads from pipe */
         close(pipefd[1]);          /* Close unused write end */
@@ -47,17 +47,21 @@ int main(int argc, char *argv[])
             write(STDOUT_FILENO, &buf, 1);
         write(STDOUT_FILENO, "\n", 1);
         close(pipefd[0]);
-        _exit(EXIT_SUCCESS);
+        wait(NULL);
+	//move print statement here
+	_exit(EXIT_SUCCESS);
     } else {            /* Child writes argv[1] to pipe */
         close(pipefd[0]);          /* Close unused read end */
         write(pipefd[1], argv[1], strlen(argv[1]));
         close(pipefd[1]);          /* Reader will see EOF */
-        wait(NULL);                /* Wait for child */
-        exit(EXIT_SUCCESS);
+        //wait(NULL);                /* Wait for child */
+        clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
+	printf("Estimated Fork Time = %llu nanoseconds\n", (long long unsigned int) diff);
+	exit(EXIT_SUCCESS);
         
         
     }
-    clock_gettime(CLOCK_PROCESS_CPUTTIME_ID, &time2);
+    //clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
     //cout << diff(time1,time2).tv_sec << ":" << diff(time1,time2).tv_nsec  << endl;
     printf("Estimated Fork Time = %llu nanoseconds\n", (long long unsigned int) diff);
 }
